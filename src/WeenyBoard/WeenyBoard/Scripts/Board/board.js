@@ -9,27 +9,18 @@ $(document).ready(function () {
 
 
 function createBoardViewModel(board) {
-    var laneViewModels = board.swimLanes.map(createLaneViewModel);
-
-    boardViewModel = {
-        name: ko.observable(board.name),
-        lanes: ko.observableArray(laneViewModels)
-    };
+    boardViewModel = ko.mapping.fromJS(board);
+    boardViewModel.swimLanes = board.swimLanes.mapToObservable(createLaneViewModel);
 }
 
 function createLaneViewModel(lane) {
-    var itemViewModels = lane.items.map(createItemViewModel);
-
-    return {
-        name: ko.observable(lane.name),
-        items: ko.observableArray(itemViewModels)
-    };
+    var viewModel = ko.mapping.fromJS(lane);
+    viewModel.items = lane.items.mapToObservable(createItemViewModel);
+    return viewModel;
 }
 
 function createItemViewModel(item) {
-    return {
-        description: ko.observable(item.description)
-    };
+    return ko.mapping.fromJS(item);
 }
 
 function initializeBoard() {
