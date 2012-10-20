@@ -1,6 +1,10 @@
 html, body {
     height: 100%;
 }
+
+body {
+}
+
 #board {
     height: 100%;
     padding-top: 5px;

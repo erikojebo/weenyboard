@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+﻿using System.Collections.Generic;
 using System.Web.Http;
 using WeenyBoard.Models;
 
@@ -49,7 +45,7 @@ namespace WeenyBoard.Controllers
         {
             var board = new Board
                             {
-                                Name = "Meta board",
+                                Name = "Testing board name",
                                 SwimLanes = new List<SwimLane>
                                                 {
                                                     new SwimLane
