@@ -3,13 +3,23 @@ html, body {
 }
 #board {
     height: 100%;
+    padding-top: 5px;
 }
 
 #swimlanes {
     height: 100%;
 }
 
+h1 {
+    margin: 5px;
+}
+
+h2 {
+    margin-bottom: 8px;
+}
+
 .swimlane {
+    float: left;
     display: inline-block;
     margin: 0px 10px;
     padding: 10px;
