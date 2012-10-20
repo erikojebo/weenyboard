@@ -6,7 +6,16 @@
       <h2 data-bind="text: name"></h2>
 
       <ol data-bind="foreach: items">
-        <li class="boardItem" data-bind="text: description"></li>
+        <li class="boardItem"> 
+          <!-- ko if: isEditing  -->
+          <input type="text" data-bind="value: description, executeOnEnter: endEdit, executeOnEscape: endEdit, hasfocus: isEditing" />         
+          <!-- /ko -->
+
+          <!-- ko ifnot: isEditing  -->
+          <a href="#" class="editLink" data-bind="click: beginEdit">edit</a>
+          <span data-bind="text: description"></span>
+          <!-- /ko -->
+        </li>
       </ol>
     </li>
   </ol>

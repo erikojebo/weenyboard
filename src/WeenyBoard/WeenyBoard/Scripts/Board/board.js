@@ -20,7 +20,19 @@ function createLaneViewModel(lane) {
 }
 
 function createItemViewModel(item) {
-    return ko.mapping.fromJS(item);
+    var viewModel = ko.mapping.fromJS(item);
+
+    viewModel.isEditing = ko.observable(false);
+    viewModel.toggleEditMode = function () {
+        this.isEditing(!this.isEditing());
+    };
+    viewModel.beginEdit = function () {
+        this.isEditing(true);
+    };
+    viewModel.endEdit = function () {
+        this.isEditing(false);
+    };
+    return viewModel;
 }
 
 function initializeBoard() {
