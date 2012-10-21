@@ -1,5 +1,4 @@
-<div class="header">WeenyBoard</div>
-
+﻿<div class="header">WeenyBoard</div>
 ﻿<h1 data-bind="text: name"></h1>
 
 <div id="board">
@@ -10,7 +9,7 @@
       <ol data-bind="foreach: items">
         <li class="boardItem"> 
           <!-- ko if: isEditing  -->
-          <input type="text" data-bind="value: description, executeOnEnter: endEdit, executeOnEscape: endEdit, hasfocus: isEditing" />         
+          <input type="text" data-bind="value: description, executeOnEnter: endEdit, executeOnEscape: endEdit, valueUpdate: 'afterkeydown'" />         
           <!-- /ko -->
 
           <!-- ko ifnot: isEditing  -->
