@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Routing;
 using Newtonsoft.Json;
 
 namespace WeenyBoard
@@ -11,10 +13,14 @@ namespace WeenyBoard
         public static void Register(HttpConfiguration config)
         {
             config.Routes.MapHttpRoute(
+                name: "UpdateItem", 
+                routeTemplate: "api/{controller}/updateitemdescription", 
+                defaults: new { controller = "board", action = "updateitemdescription", httpMethod = new HttpMethodConstraint(HttpMethod.Post) });
+
+            config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
-            );
+                defaults: new { id = RouteParameter.Optional });
 
             ForceGoogleChromeToUseJsonAsDefaultSerializationFormat(config);
 

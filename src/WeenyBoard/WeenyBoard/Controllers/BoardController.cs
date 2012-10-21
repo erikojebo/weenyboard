@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
+using Newtonsoft.Json.Linq;
 using WeenyBoard.Models;
 
 namespace WeenyBoard.Controllers
@@ -14,6 +16,16 @@ namespace WeenyBoard.Controllers
             _board = CreateHardCodedBoard();
 
             return _board;
+        }
+
+        public void UpdateItemDescription([FromBody]JToken token)
+        {
+            dynamic data = token;
+
+            var id = Guid.Parse((string)data.id);
+            string newDescription = data.newDescription;
+
+            // TODO: handle the command
         }
 
         // GET api/values/5

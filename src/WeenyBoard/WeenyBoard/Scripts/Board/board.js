@@ -23,14 +23,20 @@ function createItemViewModel(item) {
     var viewModel = {};
 
     viewModel.description = ko.protectedObservable(item.description);
-
+    viewModel.id = item.id;
     viewModel.isEditing = ko.observable(false);
     viewModel.isHovered = ko.observable(false);
     viewModel.beginEdit = function () {
         this.isEditing(true);
     };
     viewModel.confirmEdit = function () {
-        this.description.commit();
+        $.post(
+            'api/board/updateitemdescription', 
+            { id: this.id, newDescription: this.description.uncommitted() },
+            function(data) {
+                viewModel.description.commit();
+        });
+
         this.isEditing(false);
     };
     viewModel.cancelEdit = function () {

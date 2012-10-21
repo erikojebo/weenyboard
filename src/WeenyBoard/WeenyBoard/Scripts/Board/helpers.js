@@ -34,6 +34,10 @@ ko.protectedObservable = function(initialValue) {
         _tempValue = _actualValue();   //reset temp value
     };
 
+    result.uncommitted = function () {
+        return _tempValue;
+    }
+
     return result;
 };
 
