@@ -8,6 +8,16 @@ html, body {
 
 #swimlanes {
     height: 100%;
+    
+}
+
+.header {
+    
+    font-size: 18pt;
+    margin-left: 8px;
+    margin-bottom: 10px;
+    margin-top: 2px;
+
 }
 
 h1 {
@@ -28,6 +38,8 @@ h2 {
     border-style: solid;
     border-width: 1px;
     border-color: #cecece;
+    border-radius: 15px;
+    background-color: lightsteelblue;
 }
 
 .boardItem {
@@ -36,5 +48,7 @@ h2 {
     padding: 5px;
     border-style: solid;
     border-width: 1px;
-    border-color: #cecece;    
+    border-color: #cecece;
+    border-radius: 5px;
+    background-color: whitesmoke;    
 }
