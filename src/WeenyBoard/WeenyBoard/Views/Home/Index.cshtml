@@ -9,7 +9,7 @@
       <ol data-bind="foreach: items">
         <li class="boardItem"> 
           <!-- ko if: isEditing  -->
-          <input type="text" data-bind="value: description, executeOnEnter: endEdit, executeOnEscape: endEdit, valueUpdate: 'afterkeydown'" />         
+          <textarea type="text" data-bind="value: description, executeOnEnter: endEdit, executeOnEscape: endEdit, valueUpdate: 'afterkeydown'"></textarea>
           <!-- /ko -->
 
           <!-- ko ifnot: isEditing  -->
