@@ -20,15 +20,29 @@ function createLaneViewModel(lane) {
 }
 
 function createItemViewModel(item) {
-    var viewModel = ko.mapping.fromJS(item);
+    var viewModel = {};
+
+    viewModel.description = ko.protectedObservable(item.description);
 
     viewModel.isEditing = ko.observable(false);
+    viewModel.isHovered = ko.observable(false);
     viewModel.beginEdit = function () {
         this.isEditing(true);
     };
-    viewModel.endEdit = function () {
+    viewModel.confirmEdit = function () {
+        this.description.commit();
         this.isEditing(false);
     };
+    viewModel.cancelEdit = function () {
+        this.description.reset();
+        this.isEditing(false);
+    };
+    viewModel.onMouseOver = function () {
+        this.isHovered(true);
+    }
+    viewModel.onMouseOut = function () {
+        this.isHovered(false);
+    }
     return viewModel;
 }
 

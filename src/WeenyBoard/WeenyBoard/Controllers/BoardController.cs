@@ -72,7 +72,7 @@ namespace WeenyBoard.Controllers
                                                                         {
                                                                             new BoardItem { Description = "Item 4" },
                                                                             new BoardItem { Description = "Item 5" },
-                                                                            new BoardItem { Description = "Item 6" },
+                                                                            new BoardItem { Description = "Item 6, which has a very long description to simplify styling work" },
                                                                         }
                                                         },
                                                 }

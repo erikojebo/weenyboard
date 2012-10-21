@@ -62,5 +62,14 @@ h2 {
     width: 90%;
     height: 90%;
     min-height: 50px;
+    font-size: 12px;
     display: block;
+}
+
+.editLink {
+    font-size: 9px;
+    float: right;
+    position: relative;
+    top: -5px;
+    right: -5px;
 }

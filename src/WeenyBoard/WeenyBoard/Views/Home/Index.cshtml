@@ -7,13 +7,13 @@
       <h2 data-bind="text: name"></h2>
 
       <ol data-bind="foreach: items">
-        <li class="boardItem"> 
+        <li class="boardItem" data-bind="event: { mouseover: onMouseOver, mouseout: onMouseOut }"> 
           <!-- ko if: isEditing  -->
-          <textarea type="text" data-bind="value: description, executeOnEnter: endEdit, executeOnEscape: endEdit, valueUpdate: 'afterkeydown'"></textarea>
+          <textarea type="text" data-bind="value: description, executeOnEnter: confirmEdit, executeOnEscape: cancelEdit, valueUpdate: 'afterkeydown', focusWhen: isEditing, selectWhen: isEditing"></textarea>
           <!-- /ko -->
 
           <!-- ko ifnot: isEditing  -->
-          <a href="#" class="editLink" data-bind="click: beginEdit">edit</a>
+          <a href="#" class="editLink" data-bind="visible: isHovered, click: beginEdit">edit</a>
           <span data-bind="text: description"></span>
           <!-- /ko -->
         </li>
