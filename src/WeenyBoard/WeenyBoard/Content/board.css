@@ -54,5 +54,6 @@ h2 {
     border-width: 1px;
     border-color: #cecece;
     border-radius: 5px;
-    background-color: whitesmoke;    
+    background-color: whitesmoke;
+    height: 20px;    
 }
