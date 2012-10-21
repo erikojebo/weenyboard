@@ -10,8 +10,10 @@
 </head>
 <body>
     @RenderBody()
-
+    
+    <script type="text/javascript" src="@Url.Content("~/Scripts/Board/helpers.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/knockout-2.1.0.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/knockout.mapping-latest.js")"></script>
     @Scripts.Render("~/bundles/jquery")
     @RenderSection("scripts", required: false)
 </body>
