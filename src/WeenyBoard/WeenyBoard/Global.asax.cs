@@ -6,6 +6,8 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using WeenyBoard.CommandHandlers;
+using WeenyBoard.Infrastructure;
 
 namespace WeenyBoard
 {
@@ -22,6 +24,21 @@ namespace WeenyBoard
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            RegisterTypes();
+            RegisterCommandHandlers();
+        }
+
+        private void RegisterCommandHandlers()
+        {
+            var commandDispatcher = ObjectRegistry.Instance.Resolve<ICommandDispatcher>();
+            var inMemoryStoreCommandHandler = new InMemoryStoreCommandHandler();
+            commandDispatcher.RegisterHandler(inMemoryStoreCommandHandler);
+        }
+
+        private void RegisterTypes()
+        {
+            ObjectRegistry.Instance.Register<ICommandDispatcher>(new CommandDispatcher());
         }
     }
 }

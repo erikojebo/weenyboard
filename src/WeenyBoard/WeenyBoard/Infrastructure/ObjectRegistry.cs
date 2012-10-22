@@ -7,6 +7,8 @@ namespace WeenyBoard.Infrastructure
 {
     public class ObjectRegistry
     {
+        public static ObjectRegistry Instance = new ObjectRegistry();
+
         private readonly List<TypeRegistration> _registrations = new List<TypeRegistration>();
 
         public T Resolve<T>()

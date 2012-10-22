@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Web.Http;
 using Newtonsoft.Json.Linq;
+using WeenyBoard.CommandHandlers;
 using WeenyBoard.Commands;
+using WeenyBoard.Infrastructure;
 using WeenyBoard.Models;
 
 namespace WeenyBoard.Controllers
@@ -10,6 +12,17 @@ namespace WeenyBoard.Controllers
     public class BoardController : ApiController
     {
         private Board _board;
+        private ICommandDispatcher _commandDispatcher;
+
+        public BoardController()
+        {
+            _commandDispatcher = ObjectRegistry.Instance.Resolve<ICommandDispatcher>();
+        }
+
+        public BoardController(ICommandDispatcher commandDispatcher)
+        {
+            _commandDispatcher = commandDispatcher;
+        }
 
         // GET api/board
         public Board Get()
@@ -27,6 +40,7 @@ namespace WeenyBoard.Controllers
             string newDescription = data.newDescription;
 
             var command = new UpdateItemDescriptionCommand(id, newDescription, DateTime.Now);
+            _commandDispatcher.Dispatch(command);
         }
 
         // GET api/values/5

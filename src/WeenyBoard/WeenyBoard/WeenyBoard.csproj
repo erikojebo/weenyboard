@@ -40,6 +40,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="NSubstitute">
+      <HintPath>..\packages\NSubstitute.1.4.3.0\lib\NET40\NSubstitute.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.1\lib\nunit.framework.dll</HintPath>
     </Reference>
@@ -128,12 +131,15 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="CommandHandlers\CommandDispatcher.cs" />
+    <Compile Include="CommandHandlers\CommandDispatcherSpecs.cs" />
     <Compile Include="CommandHandlers\CommandHandlers.cs" />
     <Compile Include="CommandHandlers\IHandleCommands.cs" />
+    <Compile Include="CommandHandlers\InMemoryStoreCommandHandler.cs" />
     <Compile Include="Commands\AddBoardItemCommand.cs" />
     <Compile Include="Commands\Commands.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\UpdateItemDescriptionCommand.cs" />
+    <Compile Include="Controllers\BoardControllerSpecs.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensionsSpecs.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
