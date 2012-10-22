@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Web.Http;
 using Newtonsoft.Json.Linq;
+using WeenyBoard.Commands;
 using WeenyBoard.Models;
 
 namespace WeenyBoard.Controllers
@@ -25,7 +26,7 @@ namespace WeenyBoard.Controllers
             var id = Guid.Parse((string)data.id);
             string newDescription = data.newDescription;
 
-            // TODO: handle the command
+            var command = new UpdateItemDescriptionCommand(id, newDescription, DateTime.Now);
         }
 
         // GET api/values/5
