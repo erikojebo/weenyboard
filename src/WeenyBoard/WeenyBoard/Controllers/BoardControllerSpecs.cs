@@ -4,6 +4,8 @@ using NUnit.Framework;
 using Newtonsoft.Json.Linq;
 using WeenyBoard.CommandHandlers;
 using WeenyBoard.Commands;
+using WeenyBoard.Data;
+using WeenyBoard.Models;
 
 namespace WeenyBoard.Controllers
 {
@@ -12,12 +14,15 @@ namespace WeenyBoard.Controllers
     {
         private BoardController _controller;
         private ICommandDispatcher _commandDispatcher;
+        private IBoardRepository _boardRepository;
 
         [SetUp]
         public void SetUp()
         {
             _commandDispatcher = Substitute.For<ICommandDispatcher>();
-            _controller = new BoardController(_commandDispatcher);
+            _boardRepository = Substitute.For<IBoardRepository>();
+
+            _controller = new BoardController(_commandDispatcher, _boardRepository);
         }
 
         [Test]
@@ -32,6 +37,18 @@ namespace WeenyBoard.Controllers
                 Arg.Is<UpdateItemDescriptionCommand>(x =>
                                                      x.ItemId == new Guid("90B09AAC-0A46-49BE-AEE2-124148C0455D") &&
                                                      x.NewDescription == "new description"));
+        }
+
+        [Test]
+        public void Get_returns_persisted_board()
+        {
+            var expectedBoard = new Board();
+
+            _boardRepository.Get().Returns(expectedBoard);
+
+            var actualBoard = _controller.Get();
+
+            Assert.AreSame(expectedBoard, actualBoard);
         }
     }
 }

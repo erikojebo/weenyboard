@@ -134,12 +134,15 @@
     <Compile Include="CommandHandlers\CommandDispatcherSpecs.cs" />
     <Compile Include="CommandHandlers\CommandHandlers.cs" />
     <Compile Include="CommandHandlers\IHandleCommands.cs" />
-    <Compile Include="CommandHandlers\InMemoryStoreCommandHandler.cs" />
+    <Compile Include="CommandHandlers\PersistentStoreCommandHandler.cs" />
+    <Compile Include="CommandHandlers\PersistentStoreCommandHandlerSpecs.cs" />
     <Compile Include="Commands\AddBoardItemCommand.cs" />
     <Compile Include="Commands\Commands.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\UpdateItemDescriptionCommand.cs" />
     <Compile Include="Controllers\BoardControllerSpecs.cs" />
+    <Compile Include="Data\IBoardRepository.cs" />
+    <Compile Include="Data\InMemoryBoardRepository.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensionsSpecs.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />

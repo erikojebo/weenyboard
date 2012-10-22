@@ -4,6 +4,7 @@ using System.Web.Http;
 using Newtonsoft.Json.Linq;
 using WeenyBoard.CommandHandlers;
 using WeenyBoard.Commands;
+using WeenyBoard.Data;
 using WeenyBoard.Infrastructure;
 using WeenyBoard.Models;
 
@@ -11,25 +12,24 @@ namespace WeenyBoard.Controllers
 {
     public class BoardController : ApiController
     {
-        private Board _board;
-        private ICommandDispatcher _commandDispatcher;
+        private readonly ICommandDispatcher _commandDispatcher;
+        private readonly IBoardRepository _boardRepository;
 
         public BoardController()
+            : this(ObjectRegistry.Instance.Resolve<ICommandDispatcher>(), ObjectRegistry.Instance.Resolve<IBoardRepository>())
         {
-            _commandDispatcher = ObjectRegistry.Instance.Resolve<ICommandDispatcher>();
         }
 
-        public BoardController(ICommandDispatcher commandDispatcher)
+        public BoardController(ICommandDispatcher commandDispatcher, IBoardRepository boardRepository)
         {
             _commandDispatcher = commandDispatcher;
+            _boardRepository = boardRepository;
         }
 
         // GET api/board
         public Board Get()
         {
-            _board = CreateHardCodedBoard();
-
-            return _board;
+            return _boardRepository.Get();
         }
 
         public void UpdateItemDescription([FromBody]JToken token)
@@ -66,45 +66,6 @@ namespace WeenyBoard.Controllers
 
         public void Delete(int id)
         {
-        }
-
-        private static Board CreateHardCodedBoard()
-        {
-            var board = new Board
-                            {
-                                Name = "Testing board name",
-                                SwimLanes = new List<SwimLane>
-                                                {
-                                                    new SwimLane
-                                                        {
-                                                            Name = "Todo",
-                                                            Items = new List<BoardItem>
-                                                                        {
-                                                                            new BoardItem { Description = "Item 1" },
-                                                                            new BoardItem { Description = "Item 2" },
-                                                                        }
-                                                        },
-                                                    new SwimLane
-                                                        {
-                                                            Name = "In Progress",
-                                                            Items = new List<BoardItem>
-                                                                        {
-                                                                            new BoardItem { Description = "Item 3" },
-                                                                        }
-                                                        },
-                                                    new SwimLane
-                                                        {
-                                                            Name = "Done",
-                                                            Items = new List<BoardItem>
-                                                                        {
-                                                                            new BoardItem { Description = "Item 4" },
-                                                                            new BoardItem { Description = "Item 5" },
-                                                                            new BoardItem { Description = "Item 6, which has a very long description to simplify styling work" },
-                                                                        }
-                                                        },
-                                                }
-                            };
-            return board;
         }
     }
 }

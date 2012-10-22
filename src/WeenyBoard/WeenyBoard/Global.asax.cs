@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using WeenyBoard.CommandHandlers;
+using WeenyBoard.Data;
 using WeenyBoard.Infrastructure;
 
 namespace WeenyBoard
@@ -32,13 +33,14 @@ namespace WeenyBoard
         private void RegisterCommandHandlers()
         {
             var commandDispatcher = ObjectRegistry.Instance.Resolve<ICommandDispatcher>();
-            var inMemoryStoreCommandHandler = new InMemoryStoreCommandHandler();
-            commandDispatcher.RegisterHandler(inMemoryStoreCommandHandler);
+            var persistentStoreCommandHandler = new PersistentStoreCommandHandler();
+            commandDispatcher.RegisterHandler(persistentStoreCommandHandler);
         }
 
         private void RegisterTypes()
         {
             ObjectRegistry.Instance.Register<ICommandDispatcher>(new CommandDispatcher());
+            ObjectRegistry.Instance.Register<IBoardRepository>(new InMemoryBoardRepository());
         }
     }
 }
