@@ -74,7 +74,7 @@ ko.bindingHandlers.focusWhen = {
         var observableValue = valueAccessor();
         var value = ko.utils.unwrapObservable(observableValue);
 
-        if (value){
+        if (value) {
             element.focus();
         }
     }
@@ -85,8 +85,17 @@ ko.bindingHandlers.selectWhen = {
         var observableValue = valueAccessor();
         var value = ko.utils.unwrapObservable(observableValue);
 
-        if (value){
+        if (value) {
             element.select();
         }
     }
 };
+
+ko.bindingHandlers.data_id = {
+    init: function (element, valueAccessor, allBindingsAccessor, viewModel) { 
+        var observableValue = valueAccessor();
+        var value = ko.utils.unwrapObservable(observableValue);
+
+        $(element).attr("data-id", value);
+    }
+}

@@ -73,3 +73,8 @@ h2 {
     top: -5px;
     right: -5px;
 }
+
+.selected {
+    border-width: 3px;
+    border-color: #999;
+}
