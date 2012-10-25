@@ -3,6 +3,12 @@ Array.prototype.mapToObservable = function (mappingFunction) {
     return ko.observableArray(items);
 }
 
+Array.prototype.foreach = function( callback ) {
+  for( var k=0; k<this .length; k++ ) {
+    callback(this[k]);
+  }
+}
+
 //wrapper to an observable that requires accept/cancel
 ko.protectedObservable = function(initialValue) {
     //private variables

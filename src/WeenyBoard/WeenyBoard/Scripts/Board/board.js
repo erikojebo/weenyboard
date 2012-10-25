@@ -12,8 +12,28 @@ function createBoardViewModel(board) {
     boardViewModel = ko.mapping.fromJS(board);
     boardViewModel.swimLanes = board.swimLanes.mapToObservable(createLaneViewModel);
 
+    boardViewModel.findSelectedItemPosition = function () {
+	    for (var i = 0; i < this.swimLanes().length; i++) {
+            for (var j = 0; j < this.swimLanes()[i].items().length; j++) {
+                if (this.swimLanes()[i].items()[j].isSelected())
+                    return { swimLaneIndex: i, itemIndex: j };
+            }
+        }
+        return null;
+    }
+
+    boardViewModel.hasSelectedItem = function () {
+        var position = this.findSelectedItemPosition();
+        return position !== null;
+    }
+
+    boardViewModel.getItemByPosition = function (position) {
+	    return this.swimLanes()[position.swimLaneIndex].items()[position.itemIndex];
+    }
+
     boardViewModel.findSelectedItem = function () {
-	    return this.swimLanes()[0].items()[0];
+        var position = this.findSelectedItemPosition();
+        return this.getItemByPosition(position);
     };
 
     boardViewModel.findSelectedItemId = function () {
@@ -30,14 +50,71 @@ function createBoardViewModel(board) {
         return false;
     };
 
+    boardViewModel.editSelected = function () {
+	    var item = this.findSelectedItem();
+        item.isEditing(true);
+    }
+
+    boardViewModel.getNextItemPosition = function (position) {
+	    var nextItemSwimLaneIndex = position.swimLaneIndex;
+        var nextItemIndex = position.itemIndex + 1;
+
+        if (nextItemIndex >= boardViewModel.swimLanes()[position.swimLaneIndex].items().length) {
+            nextItemIndex = 0;
+            nextItemSwimLaneIndex++;
+        }
+
+        if (nextItemSwimLaneIndex >= boardViewModel.swimLanes().length) {
+            return position;
+        }
+
+        return { swimLaneIndex: nextItemSwimLaneIndex, itemIndex: nextItemIndex };
+    }
+
+    boardViewModel.getPreviousItemPosition = function (position) {
+	    var previousItemSwimLaneIndex = position.swimLaneIndex;
+        var previousItemIndex = position.itemIndex - 1;
+
+        if (previousItemIndex < 0) {
+            previousItemSwimLaneIndex--;
+            previousItemIndex = this.swimLanes()[previousItemSwimLaneIndex].items().length - 1;
+        }
+
+        if (previousItemSwimLaneIndex < 0) {
+            return position;
+        }
+
+        return { swimLaneIndex: previousItemSwimLaneIndex, itemIndex: previousItemIndex };
+    }
+
+
     boardViewModel.selectNextItem = function () {
-	    alert("next");
-    };
-    boardViewModel.selectPreviousItem = function () {
-	    alert("prev");
+        var position = this.findSelectedItemPosition();
+        var nextPosition = this.getNextItemPosition(position);
+        this.selectItem(nextPosition);
     };
 
-    boardViewModel.swimLanes()[0].items()[0].select();
+    boardViewModel.selectPreviousItem = function () {
+        var position = this.findSelectedItemPosition();
+        var previousPosition = this.getPreviousItemPosition(position);
+        this.selectItem(previousPosition);
+    };
+
+    boardViewModel.selectItem = function (position) {
+        this.deselectAllItems();
+	    var item = this.getItemByPosition(position);
+        item.select();
+    }
+    
+    boardViewModel.deselectAllItems = function () {
+	    this.swimLanes().foreach(function (lane) {
+	        lane.items().foreach(function (item) {
+	            item.deselect();
+            })
+        });
+    }
+    
+    boardViewModel.selectItem({ swimLaneIndex: 0, itemIndex: 0});
 }
 
 function createLaneViewModel(lane) {
@@ -56,6 +133,10 @@ function createItemViewModel(item) {
     viewModel.isSelected = ko.observable(false);
     viewModel.select = function () {
         this.isSelected(true);
+        refreshSelectionMarkers();
+    }
+    viewModel.deselect = function () {
+        this.isSelected(false);
         refreshSelectionMarkers();
     }
     viewModel.beginEdit = function () {
@@ -93,6 +174,7 @@ function initializeBoard() {
         var keycode = e.which;
         var j = 74;
         var k = 75;
+        var f2 = 113;
 
         if (boardViewModel.isEditing()) {
             return true;
@@ -106,6 +188,10 @@ function initializeBoard() {
             boardViewModel.selectPreviousItem();
             return false;
         }
+        else if (keycode == f2 && boardViewModel.hasSelectedItem()) {
+            boardViewModel.editSelected();
+            return false;
+        }
 
         return true;
     });
@@ -114,6 +200,10 @@ function initializeBoard() {
 function refreshSelectionMarkers() {
     $(".boardItem").removeClass("selected");
     
+    if (!boardViewModel.hasSelectedItem()) {
+        return;
+    }
+
     var selectedItemId = boardViewModel.findSelectedItemId();
 
     $("li[data-id='" + selectedItemId +"']").addClass("selected");
