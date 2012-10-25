@@ -1,14 +1,14 @@
 ﻿<div class="header">WeenyBoard</div>
 ﻿<h1 data-bind="text: name"></h1>
 
-<div id="board" />
+<div id="board">
   <ol id="swimlanes" data-bind="foreach: swimLanes">
       <li class="swimlane">
           <a href="#">New item</a>
           <h2 data-bind="text: name"></h2>
 
           <ol data-bind="foreach: items">
-        <li class="boardItem" data-bind="event: { mouseover: onMouseOver, mouseout: onMouseOut }, data_id: id"> 
+              <li class="boardItem" data-bind="event: { mouseover: onMouseOver, mouseout: onMouseOut }"> 
                   <!-- ko if: isEditing  -->
                   <textarea type="text" data-bind="value: description, executeOnEnter: confirmEdit, executeOnEscape: cancelEdit, valueUpdate: 'afterkeydown', focusWhen: isEditing, selectWhen: isEditing"></textarea>
                   <!-- /ko -->

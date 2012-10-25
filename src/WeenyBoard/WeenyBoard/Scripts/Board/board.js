@@ -162,6 +162,15 @@ function createItemViewModel(item) {
     viewModel.onMouseOut = function () {
         this.isHovered(false);
     }
+
+    viewModel.confirmCreate = function() {
+        $.post(
+            'api/board/post',
+        {id: this.id, Description: this.description.uncommitted() },
+        function(data) {
+            viewModel.description.commit();
+        });
+    };
     return viewModel;
 }
 
