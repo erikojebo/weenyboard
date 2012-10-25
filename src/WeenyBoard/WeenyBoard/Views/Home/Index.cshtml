@@ -3,23 +3,24 @@
 
 <div id="board">
   <ol id="swimlanes" data-bind="foreach: swimLanes">
-    <li class="swimlane">
-      <h2 data-bind="text: name"></h2>
+      <li class="swimlane">
+          <a href="#">New item</a>
+          <h2 data-bind="text: name"></h2>
 
-        <ol data-bind="foreach: items">
-            <li class="boardItem" data-bind="event: { mouseover: onMouseOver, mouseout: onMouseOut }"> 
-                <!-- ko if: isEditing  -->
-                <textarea type="text" data-bind="value: description, executeOnEnter: confirmEdit, executeOnEscape: cancelEdit, valueUpdate: 'afterkeydown', focusWhen: isEditing, selectWhen: isEditing"></textarea>
-                <!-- /ko -->
+          <ol data-bind="foreach: items">
+              <li class="boardItem" data-bind="event: { mouseover: onMouseOver, mouseout: onMouseOut }"> 
+                  <!-- ko if: isEditing  -->
+                  <textarea type="text" data-bind="value: description, executeOnEnter: confirmEdit, executeOnEscape: cancelEdit, valueUpdate: 'afterkeydown', focusWhen: isEditing, selectWhen: isEditing"></textarea>
+                  <!-- /ko -->
 
-                <!-- ko ifnot: isEditing  -->
-                <a href="#" class="editLink" data-bind="visible: isHovered, click: beginEdit">edit</a>
-                <span data-bind="text: description"></span>
-                <!-- /ko -->
-            </li>
-        </ol>
-        <a href="#">New item</a>
-    </li>
+                  <!-- ko ifnot: isEditing  -->
+                  <a href="#" class="editLink" data-bind="visible: isHovered, click: beginEdit">edit</a>
+                  <span data-bind="text: description"></span>
+                  <!-- /ko -->
+              </li>
+          </ol>
+        
+      </li>
   </ol>
 </div>
 
