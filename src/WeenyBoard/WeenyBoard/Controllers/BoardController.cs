@@ -50,10 +50,15 @@ namespace WeenyBoard.Controllers
             return "value";
         }
 
-        // POST api/values
-
-        public void Post([FromBody]string value)
+        public void Post([FromBody]JToken token)
         {
+            dynamic data = token;
+
+            var id = Guid.Parse((string)data.id);
+            string newDescription = data.newDescription;
+
+            var command = new AddBoardItemCommand(id, newDescription, DateTime.Now);
+            _commandDispatcher.Dispatch(command);
         }
 
         // PUT api/values/5

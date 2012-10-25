@@ -32,7 +32,6 @@ namespace WeenyBoard.CommandHandlers
     public interface ICommandDispatcher
     {
         void Dispatch<T>(T command) where T : ICommand;
-        void RegisterHandler<T>(IHandleCommands<T> handler) where T : ICommand
-;
+        void RegisterHandler<T>(IHandleCommands<T> handler) where T : ICommand;
     }
 }
