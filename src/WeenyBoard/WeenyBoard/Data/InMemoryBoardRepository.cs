@@ -36,6 +36,7 @@ namespace WeenyBoard.Data
                                                 {
                                                     new SwimLane
                                                         {
+                                                            Id = Guid.NewGuid(),
                                                             Name = "Todo",
                                                             Items = new List<BoardItem>
                                                                         {
@@ -45,6 +46,7 @@ namespace WeenyBoard.Data
                                                         },
                                                     new SwimLane
                                                         {
+                                                            Id = Guid.NewGuid(),
                                                             Name = "In Progress",
                                                             Items = new List<BoardItem>
                                                                         {
@@ -53,6 +55,7 @@ namespace WeenyBoard.Data
                                                         },
                                                     new SwimLane
                                                         {
+                                                            Id = Guid.NewGuid(),
                                                             Name = "Done",
                                                             Items = new List<BoardItem>
                                                                         {

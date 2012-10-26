@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace WeenyBoard.Models
@@ -11,5 +12,7 @@ namespace WeenyBoard.Models
 
         public string Name { get; set; }
         public IList<BoardItem> Items { get; set; }
+
+        public Guid Id { get; set; }
     }
 }
