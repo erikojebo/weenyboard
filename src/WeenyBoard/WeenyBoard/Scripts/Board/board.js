@@ -9,169 +9,177 @@ $(document).ready(function () {
 
 
 function createBoardViewModel(board) {
-    boardViewModel = ko.mapping.fromJS(board);
-    boardViewModel.swimLanes = board.swimLanes.mapToObservable(createLaneViewModel);
+    boardViewModel = {
+        id: board.id,
+        name: ko.observable(board.name),
+        swimLanes: board.swimLanes.mapToObservable(createLaneViewModel),
 
-    boardViewModel.findSelectedItemPosition = function () {
-	    for (var i = 0; i < this.swimLanes().length; i++) {
-            for (var j = 0; j < this.swimLanes()[i].items().length; j++) {
-                if (this.swimLanes()[i].items()[j].isSelected())
-                    return { swimLaneIndex: i, itemIndex: j };
+        findSelectedItemPosition: function () {
+	        for (var i = 0; i < this.swimLanes().length; i++) {
+                for (var j = 0; j < this.swimLanes()[i].items().length; j++) {
+                    if (this.swimLanes()[i].items()[j].isSelected())
+                        return { swimLaneIndex: i, itemIndex: j };
+                }
             }
-        }
-        return null;
-    }
+            return null;
+        },
 
-    boardViewModel.hasSelectedItem = function () {
-        var position = this.findSelectedItemPosition();
-        return position !== null;
-    }
+        hasSelectedItem: function () {
+            var position = this.findSelectedItemPosition();
+            return position !== null;
+        },
 
-    boardViewModel.getItemByPosition = function (position) {
-	    return this.swimLanes()[position.swimLaneIndex].items()[position.itemIndex];
-    }
+        getItemByPosition: function (position) {
+	        return this.swimLanes()[position.swimLaneIndex].items()[position.itemIndex];
+        },
 
-    boardViewModel.findSelectedItem = function () {
-        var position = this.findSelectedItemPosition();
-        return this.getItemByPosition(position);
-    };
+        findSelectedItem: function () {
+            var position = this.findSelectedItemPosition();
+            return this.getItemByPosition(position);
+        },
 
-    boardViewModel.findSelectedItemId = function () {
-        return this.findSelectedItem().id;
-    };
+        findSelectedItemId: function () {
+            return this.findSelectedItem().id;
+        },
 
-    boardViewModel.isEditing = function () {
-	    for (var i = 0; i < this.swimLanes().length; i++) {
-            for (var j = 0; j < this.swimLanes()[i].items().length; j++) {
-                if (this.swimLanes()[i].items()[j].isEditing())
-                    return true;
+        isEditing: function () {
+	        for (var i = 0; i < this.swimLanes().length; i++) {
+                for (var j = 0; j < this.swimLanes()[i].items().length; j++) {
+                    if (this.swimLanes()[i].items()[j].isEditing())
+                        return true;
+                }
             }
+            return false;
+        },
+
+        editSelected: function () {
+	        var item = this.findSelectedItem();
+            item.isEditing(true);
+        },
+
+        getNextItemPosition: function (position) {
+	        var nextItemSwimLaneIndex = position.swimLaneIndex;
+            var nextItemIndex = position.itemIndex + 1;
+
+            if (nextItemIndex >= boardViewModel.swimLanes()[position.swimLaneIndex].items().length) {
+                nextItemIndex = 0;
+                nextItemSwimLaneIndex++;
+            }
+
+            if (nextItemSwimLaneIndex >= boardViewModel.swimLanes().length) {
+                return position;
+            }
+
+            return { swimLaneIndex: nextItemSwimLaneIndex, itemIndex: nextItemIndex };
+        },
+
+        getPreviousItemPosition: function (position) {
+	        var previousItemSwimLaneIndex = position.swimLaneIndex;
+            var previousItemIndex = position.itemIndex - 1;
+
+            if (previousItemIndex < 0) {
+                previousItemSwimLaneIndex--;
+                previousItemIndex = this.swimLanes()[previousItemSwimLaneIndex].items().length - 1;
+            }
+
+            if (previousItemSwimLaneIndex < 0) {
+                return position;
+            }
+
+            return { swimLaneIndex: previousItemSwimLaneIndex, itemIndex: previousItemIndex };
+        },
+
+        selectNextItem: function () {
+            var position = this.findSelectedItemPosition();
+            var nextPosition = this.getNextItemPosition(position);
+            this.selectItem(nextPosition);
+        },
+
+        selectPreviousItem: function () {
+            var position = this.findSelectedItemPosition();
+            var previousPosition = this.getPreviousItemPosition(position);
+            this.selectItem(previousPosition);
+        },
+
+        selectItem: function (position) {
+            this.deselectAllItems();
+	        var item = this.getItemByPosition(position);
+            item.select();
+        },
+        
+        deselectAllItems: function () {
+	        this.swimLanes().foreach(function (lane) {
+	            lane.items().foreach(function (item) {
+	                item.deselect();
+                })
+            });
         }
-        return false;
-    };
-
-    boardViewModel.editSelected = function () {
-	    var item = this.findSelectedItem();
-        item.isEditing(true);
-    }
-
-    boardViewModel.getNextItemPosition = function (position) {
-	    var nextItemSwimLaneIndex = position.swimLaneIndex;
-        var nextItemIndex = position.itemIndex + 1;
-
-        if (nextItemIndex >= boardViewModel.swimLanes()[position.swimLaneIndex].items().length) {
-            nextItemIndex = 0;
-            nextItemSwimLaneIndex++;
-        }
-
-        if (nextItemSwimLaneIndex >= boardViewModel.swimLanes().length) {
-            return position;
-        }
-
-        return { swimLaneIndex: nextItemSwimLaneIndex, itemIndex: nextItemIndex };
-    }
-
-    boardViewModel.getPreviousItemPosition = function (position) {
-	    var previousItemSwimLaneIndex = position.swimLaneIndex;
-        var previousItemIndex = position.itemIndex - 1;
-
-        if (previousItemIndex < 0) {
-            previousItemSwimLaneIndex--;
-            previousItemIndex = this.swimLanes()[previousItemSwimLaneIndex].items().length - 1;
-        }
-
-        if (previousItemSwimLaneIndex < 0) {
-            return position;
-        }
-
-        return { swimLaneIndex: previousItemSwimLaneIndex, itemIndex: previousItemIndex };
-    }
-
-
-    boardViewModel.selectNextItem = function () {
-        var position = this.findSelectedItemPosition();
-        var nextPosition = this.getNextItemPosition(position);
-        this.selectItem(nextPosition);
-    };
-
-    boardViewModel.selectPreviousItem = function () {
-        var position = this.findSelectedItemPosition();
-        var previousPosition = this.getPreviousItemPosition(position);
-        this.selectItem(previousPosition);
-    };
-
-    boardViewModel.selectItem = function (position) {
-        this.deselectAllItems();
-	    var item = this.getItemByPosition(position);
-        item.select();
-    }
-    
-    boardViewModel.deselectAllItems = function () {
-	    this.swimLanes().foreach(function (lane) {
-	        lane.items().foreach(function (item) {
-	            item.deselect();
-            })
-        });
     }
     
     boardViewModel.selectItem({ swimLaneIndex: 0, itemIndex: 0});
 }
 
 function createLaneViewModel(lane) {
-    var viewModel = ko.mapping.fromJS(lane);
-    viewModel.items = lane.items.mapToObservable(createItemViewModel);
-    return viewModel;
+    return {
+        id: lane.id,
+        name: ko.observable(lane.name),
+        items: lane.items.mapToObservable(createItemViewModel)
+    };
 }
 
 function createItemViewModel(item) {
-    var viewModel = {};
+    return {
+        description: ko.protectedObservable(item.description),
+        id: item.id,
+        isEditing: ko.observable(false),
+        isHovered: ko.observable(false),
+        isSelected: ko.observable(false),
+        select: function () {
+            this.isSelected(true);
+            refreshSelectionMarkers();
+        },
+        deselect: function () {
+            this.isSelected(false);
+            refreshSelectionMarkers();
+        },
+        beginEdit: function () {
+            this.isEditing(true);
+        },
+        confirmEdit: function () {
 
-    viewModel.description = ko.protectedObservable(item.description);
-    viewModel.id = item.id;
-    viewModel.isEditing = ko.observable(false);
-    viewModel.isHovered = ko.observable(false);
-    viewModel.isSelected = ko.observable(false);
-    viewModel.select = function () {
-        this.isSelected(true);
-        refreshSelectionMarkers();
-    }
-    viewModel.deselect = function () {
-        this.isSelected(false);
-        refreshSelectionMarkers();
-    }
-    viewModel.beginEdit = function () {
-        this.isEditing(true);
-    };
-    viewModel.confirmEdit = function () {
-        $.post(
-            'api/board/updateitemdescription', 
-            { id: this.id, newDescription: this.description.uncommitted() },
-            function(data) {
-                viewModel.description.commit();
-        });
+            // Store this in a variable so that it can be accessed and bound in the
+            // success callback of the POST. 'this' is not the viewmodel instance
+            // when inside the callback.
+            var viewModel = this;
 
-        this.isEditing(false);
-    };
-    viewModel.cancelEdit = function () {
-        this.description.reset();
-        this.isEditing(false);
-    };
-    viewModel.onMouseOver = function () {
-        this.isHovered(true);
-    }
-    viewModel.onMouseOut = function () {
-        this.isHovered(false);
-    }
+            $.post(
+                'api/board/updateitemdescription', 
+                { id: this.id, newDescription: this.description.uncommitted() },
+                function(data) {
+                    viewModel.description.commit();
+                });
 
-    viewModel.confirmCreate = function() {
-        $.post(
-            'api/board/post',
-        {id: this.id, Description: this.description.uncommitted() },
-        function(data) {
-            viewModel.description.commit();
-        });
-    };
-    return viewModel;
+            this.isEditing(false);
+        },
+        cancelEdit: function () {
+            this.description.reset();
+            this.isEditing(false);
+        },
+        onMouseOver: function () {
+            this.isHovered(true);
+        },
+        onMouseOut: function () {
+            this.isHovered(false);
+        },
+        confirmCreate: function() {
+            $.post(
+                'api/board/post',
+                {id: this.id, Description: this.description.uncommitted() },
+                function(data) {
+                    viewModel.description.commit();
+                });
+        }
+    }
 }
 
 function initializeBoard() {
