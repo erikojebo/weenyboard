@@ -40,6 +40,20 @@ namespace WeenyBoard.Controllers
         }
 
         [Test]
+        public void ChangeSwimLane_dispatches_corresponding_command()
+        {
+            var json = @"{ id: '90B09AAC-0A46-49BE-AEE2-124148C0455D', newSwimLaneId: 'C987EDB7-21EB-416F-B136-F7804F6DA76C' }";
+            var jObject = JObject.Parse(json);
+
+            _controller.ChangeSwimLane(jObject);
+
+            _commandDispatcher.Received().Dispatch(
+                Arg.Is<ChangeSwimLaneCommand>(x =>
+                                                     x.ItemId == new Guid("90B09AAC-0A46-49BE-AEE2-124148C0455D") &&
+                                                     x.NewSwimLaneId == new Guid("C987EDB7-21EB-416F-B136-F7804F6DA76C")));
+        }
+
+        [Test]
         public void Get_returns_persisted_board()
         {
             var expectedBoard = new Board();

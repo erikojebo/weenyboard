@@ -4,7 +4,7 @@ using WeenyBoard.Infrastructure;
 
 namespace WeenyBoard.CommandHandlers
 {
-    public class PersistentStoreCommandHandler : IHandleCommands<UpdateItemDescriptionCommand>
+    public class PersistentStoreCommandHandler : IHandleCommands<UpdateItemDescriptionCommand>, IHandleCommands<ChangeSwimLaneCommand>
     {
         private IBoardRepository _repository;
 
@@ -20,6 +20,11 @@ namespace WeenyBoard.CommandHandlers
         public void Handle(UpdateItemDescriptionCommand command)
         {
             _repository.UpdateItemDescription(command.ItemId, command.NewDescription);
+        }
+
+        public void Handle(ChangeSwimLaneCommand command)
+        {
+            _repository.ChangeSwimLane(command.ItemId, command.NewSwimLaneId);
         }
     }
 }

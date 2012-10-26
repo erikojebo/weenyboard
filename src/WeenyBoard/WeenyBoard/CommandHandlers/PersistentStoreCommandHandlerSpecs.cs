@@ -28,5 +28,15 @@ namespace WeenyBoard.CommandHandlers
             
             _repository.Received().UpdateItemDescription(new Guid("AFCCC93D-9BD9-4E83-987C-CD2068B905BB"), "new description");
         }
+
+        [Test]
+        public void Handling_a_ChangeSwimLane_command_changes_the_swimlane_for_the_item_in_the_persistent_store()
+        {
+            var command = new ChangeSwimLaneCommand(new Guid("AFCCC93D-9BD9-4E83-987C-CD2068B905BB"), new Guid("961C16DF-E40E-4A0E-8846-3AD32359662C"), DateTime.Now);
+
+            _handler.Handle(command);
+
+            _repository.Received().ChangeSwimLane(new Guid("AFCCC93D-9BD9-4E83-987C-CD2068B905BB"), new Guid("961C16DF-E40E-4A0E-8846-3AD32359662C"));
+        }
     }
 }

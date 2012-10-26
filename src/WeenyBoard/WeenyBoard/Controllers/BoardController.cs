@@ -43,6 +43,17 @@ namespace WeenyBoard.Controllers
             _commandDispatcher.Dispatch(command);
         }
 
+        public void ChangeSwimLane(JObject token)
+        {
+            dynamic data = token;
+
+            var id = Guid.Parse((string)data.id);
+            var newSwimLaneId = Guid.Parse((string)data.newSwimLaneId);
+
+            var command = new ChangeSwimLaneCommand(id, newSwimLaneId, DateTime.Now);
+            _commandDispatcher.Dispatch(command);
+        }
+
         // GET api/values/5
 
         public string Get(int id)

@@ -113,6 +113,47 @@ function createBoardViewModel(board) {
 	                item.deselect();
                 })
             });
+        },
+
+        moveSelectedItemToSwimLaneIndex: function (oldItemPosition, newSwimLaneIndex) {
+            var selectedItem = this.findSelectedItem();
+            var newSwimLaneId = this.swimLanes()[newSwimLaneIndex].id;
+
+	        $.post(
+                'api/board/changeswimlane', 
+                { id: selectedItem.id, newSwimLaneId: newSwimLaneId },
+                function(data) {
+                    boardViewModel.swimLanes()[oldItemPosition.swimLaneIndex].items
+                        .splice(oldItemPosition.itemIndex, 1);
+
+                    boardViewModel.swimLanes()[newSwimLaneIndex].items
+                        .push(selectedItem)
+
+                    refreshSelectionMarkers();
+                });
+
+        },
+
+        moveSelectedItemRight: function () {
+            var selectedItemPosition = this.findSelectedItemPosition();
+            var newSwimLaneIndex = selectedItemPosition.swimLaneIndex + 1;
+
+            if (selectedItemPosition.swimLaneIndex == this.swimLanes().length) {
+                return;
+            }
+
+            this.moveSelectedItemToSwimLaneIndex(selectedItemPosition, newSwimLaneIndex);
+        },
+
+        moveSelectedItemLeft: function () {
+            var selectedItemPosition = this.findSelectedItemPosition();
+            var newSwimLaneIndex = selectedItemPosition.swimLaneIndex - 1;
+
+            if (selectedItemPosition.swimLaneIndex < 0) {
+                return;
+            }
+            
+            this.moveSelectedItemToSwimLaneIndex(selectedItemPosition, newSwimLaneIndex);
         }
     }
     
@@ -192,6 +233,8 @@ function initializeBoard() {
         var j = 74;
         var k = 75;
         var f2 = 113;
+        var leftArrow = 37;
+        var rightArrow = 39;
 
         if (boardViewModel.isEditing()) {
             return true;
@@ -207,6 +250,14 @@ function initializeBoard() {
         }
         else if (keycode == f2 && boardViewModel.hasSelectedItem()) {
             boardViewModel.editSelected();
+            return false;
+        }
+        else if (e.shiftKey && keycode == leftArrow) {
+            boardViewModel.moveSelectedItemLeft();
+            return false;
+        }
+        else if (e.shiftKey && keycode == rightArrow) {
+            boardViewModel.moveSelectedItemRight();
             return false;
         }
 

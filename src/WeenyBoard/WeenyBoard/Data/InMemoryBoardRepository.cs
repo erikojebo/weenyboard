@@ -22,6 +22,16 @@ namespace WeenyBoard.Data
                 item.Description = newDescription;
         }
 
+        public void ChangeSwimLane(Guid itemId, Guid newSwimLaneId)
+        {
+            var item = _board.SwimLanes.SelectMany(x => x.Items).First(x => x.Id == itemId);
+            var oldLane = _board.SwimLanes.First(l => l.Items.Any(i => i.Id == itemId));
+            var newLane = _board.SwimLanes.First(x => x.Id == newSwimLaneId);
+
+            oldLane.Items.Remove(item);
+            newLane.Items.Add(item);
+        }
+
         public Board Get()
         {
             return _board;

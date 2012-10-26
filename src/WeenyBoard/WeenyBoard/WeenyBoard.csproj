@@ -137,6 +137,7 @@
     <Compile Include="CommandHandlers\PersistentStoreCommandHandler.cs" />
     <Compile Include="CommandHandlers\PersistentStoreCommandHandlerSpecs.cs" />
     <Compile Include="Commands\AddBoardItemCommand.cs" />
+    <Compile Include="Commands\ChangeSwimLaneCommand.cs" />
     <Compile Include="Commands\Commands.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\UpdateItemDescriptionCommand.cs" />

@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using WeenyBoard.CommandHandlers;
+using WeenyBoard.Commands;
 using WeenyBoard.Data;
 using WeenyBoard.Infrastructure;
 
@@ -34,7 +35,8 @@ namespace WeenyBoard
         {
             var commandDispatcher = ObjectRegistry.Instance.Resolve<ICommandDispatcher>();
             var persistentStoreCommandHandler = new PersistentStoreCommandHandler();
-            commandDispatcher.RegisterHandler(persistentStoreCommandHandler);
+            commandDispatcher.RegisterHandler<UpdateItemDescriptionCommand>(persistentStoreCommandHandler);
+            commandDispatcher.RegisterHandler<ChangeSwimLaneCommand>(persistentStoreCommandHandler);
         }
 
         private void RegisterTypes()

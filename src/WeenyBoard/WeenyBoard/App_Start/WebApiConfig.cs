@@ -17,6 +17,11 @@ namespace WeenyBoard
                 routeTemplate: "api/{controller}/updateitemdescription", 
                 defaults: new { controller = "board", action = "updateitemdescription", httpMethod = new HttpMethodConstraint(HttpMethod.Post) });
 
+            config.Routes.MapHttpRoute(
+                name: "ChangeSwimLane", 
+                routeTemplate: "api/{controller}/changeswimlane", 
+                defaults: new { controller = "board", action = "changeswimlane", httpMethod = new HttpMethodConstraint(HttpMethod.Put) });
+
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
