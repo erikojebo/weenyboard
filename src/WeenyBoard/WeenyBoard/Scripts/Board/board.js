@@ -57,36 +57,67 @@ function createBoardViewModel(board) {
             item.isEditing(true);
         },
 
-        getNextItemPosition: function (position) {
-	        var nextItemSwimLaneIndex = position.swimLaneIndex;
-            var nextItemIndex = position.itemIndex + 1;
-
-            if (nextItemIndex >= boardViewModel.swimLanes()[position.swimLaneIndex].items().length) {
-                nextItemIndex = 0;
-                nextItemSwimLaneIndex++;
-            }
-
-            if (nextItemSwimLaneIndex >= boardViewModel.swimLanes().length) {
-                return position;
-            }
-
-            return { swimLaneIndex: nextItemSwimLaneIndex, itemIndex: nextItemIndex };
+        createPosition: function (swimLaneIndex, itemIndex) {
+	         return { swimLaneIndex: swimLaneIndex, itemIndex: itemIndex };
         },
 
-        getPreviousItemPosition: function (position) {
-	        var previousItemSwimLaneIndex = position.swimLaneIndex;
-            var previousItemIndex = position.itemIndex - 1;
+        getAllPositions: function () {
+            var positions = [];
 
-            if (previousItemIndex < 0) {
-                previousItemSwimLaneIndex--;
-                previousItemIndex = this.swimLanes()[previousItemSwimLaneIndex].items().length - 1;
+	        for (var i = 0; i < this.swimLanes().length; i++) {
+                for (var j = 0; j < this.swimLanes()[i].items().length; j++) {
+                    positions.push(this.createPosition(i,j));
+                }
             }
 
-            if (previousItemSwimLaneIndex < 0) {
+            return positions;
+        },
+
+        getAllPositionsAfter: function (position) {
+	        var allPositions = this.getAllPositions();
+            var positionsAfter = [];
+
+            allPositions.foreach(function (p) {
+	            if (p.swimLaneIndex == position.swimLaneIndex && p.itemIndex > position.itemIndex || 
+                    p.swimLaneIndex > position.swimLaneIndex)
+                    positionsAfter.push(p);
+            });
+
+
+            return positionsAfter;
+        },
+
+        getAllPositionsBefore: function (position) {
+	        var allPositions = this.getAllPositions();
+            var positionsBefore = [];
+
+            allPositions.foreach(function (p) {
+	            if (p.swimLaneIndex == position.swimLaneIndex && p.itemIndex < position.itemIndex || 
+	                p.swimLaneIndex < position.swimLaneIndex)
+                    positionsBefore.push(p);
+            });
+
+            return positionsBefore.reverse();
+        },
+
+        getNextItemPosition: function (position) {
+            var positionsAfter = this.getAllPositionsAfter(position);
+            
+            if (positionsAfter.length == 0) {
                 return position;
             }
 
-            return { swimLaneIndex: previousItemSwimLaneIndex, itemIndex: previousItemIndex };
+            return positionsAfter[0];
+        },
+        
+        getPreviousItemPosition: function (position) {
+            var positionsBefore = this.getAllPositionsBefore(position);
+            
+            if (positionsBefore.length == 0) {
+                return position;
+            }
+
+            return positionsBefore[0];
         },
 
         selectNextItem: function () {
@@ -176,6 +207,7 @@ function createItemViewModel(item) {
         isHovered: ko.observable(false),
         isSelected: ko.observable(false),
         select: function () {
+            boardViewModel.deselectAllItems();
             this.isSelected(true);
             refreshSelectionMarkers();
         },

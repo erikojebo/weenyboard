@@ -8,7 +8,7 @@
           <h2 data-bind="text: name"></h2>
 
           <ol data-bind="foreach: items">
-        <li class="boardItem" data-bind="event: { mouseover: onMouseOver, mouseout: onMouseOut }, data_id: id"> 
+            <li class="boardItem" data-bind="click: select, event: { mouseover: onMouseOver, mouseout: onMouseOut }, data_id: id"> 
                   <!-- ko if: isEditing  -->
                   <textarea type="text" data-bind="value: description, executeOnEnter: confirmEdit, executeOnEscape: cancelEdit, valueUpdate: 'afterkeydown', focusWhen: isEditing, selectWhen: isEditing"></textarea>
                   <!-- /ko -->
